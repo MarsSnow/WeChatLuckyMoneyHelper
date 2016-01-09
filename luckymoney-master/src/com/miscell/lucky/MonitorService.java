@@ -19,96 +19,118 @@ import java.util.ArrayList;
 import java.util.List;
 
 //监听器服务
+//作用：监听屏幕红包信息，并进行处理
 public class MonitorService extends AccessibilityService 
-{
-	
+{	
     private boolean m_isClicked;
-
+ 
     //监听无障碍服务
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) 
     {
-    	
-        final int eventType = event.getEventType();												//获取事件类型
+    	//获取事件类型
+        final int eventType = event.getEventType();												
 
         //通知状态变化时
         if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) 
         {
-            UnlockScreen();																		//解锁屏幕
-            
-            m_isClicked = false;											
-
-            /**
-             * for API >= 18, we use NotificationListenerService to detect the notifications
-             * below API_18 we use AccessibilityService to detect
-             */
-            //低版本SDK
-            if (Build.VERSION.SDK_INT < 18) 
-            {
-                Notification notification = (Notification) event.getParcelableData();
-                List<String> textList = getText(notification);
-                if (null != textList && textList.size() > 0) {
-                    for (String text : textList) {
-                        if (!TextUtils.isEmpty(text) && text.contains("[微信红包]")) {
-                            final PendingIntent pendingIntent = notification.contentIntent;
-                            try {
-                                pendingIntent.send();
-                            } catch (PendingIntent.CanceledException e) {
-                            }
-                            break;
-                        }
-                    }
-                }
-            }       
+        	OnNotificationChanged(event);      
         }
 
         //屏幕状态变化时
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) 
         {
-            String clazzName = event.getClassName().toString();													//获得类的名字
-            
-            //若类名和微信领取红包一级界面一致
-            if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
-            {
-                AccessibilityNodeInfo nodeInfo = event.getSource();
-                if (null != nodeInfo) {
-                    List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
-                    if (null != list && list.size() > 0) {
-                        AccessibilityNodeInfo node = list.get(list.size() - 1);
-                        if (node.isClickable()) {
-                            node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                        } else {
-                            AccessibilityNodeInfo parentNode = node;
-                            for (int i = 0; i < 5; i++) {
-                                if (null != parentNode) {
-                                    parentNode = parentNode.getParent();
-                                    if (null != parentNode && parentNode.isClickable() && !m_isClicked) {
-                                        parentNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                                        m_isClicked = true;
-                                        break;
-                                    }
+        	OnWindowsChanged(event);
+        }
+    }
+    
+    //被打断时调用
+    @Override
+    public void onInterrupt() 
+    {
+
+    }
+    
+    //通知栏变化
+    private void OnNotificationChanged(AccessibilityEvent event)
+    {
+        UnlockScreen();																		//解锁屏幕
+        
+        m_isClicked = false;											
+
+        /**
+         * for API >= 18, we use NotificationListenerService to detect the notifications
+         * below API_18 we use AccessibilityService to detect
+         */
+        //低版本SDK
+        if (Build.VERSION.SDK_INT < 18) 
+        {
+            Notification notification = (Notification) event.getParcelableData();
+            List<String> textList = getText(notification);
+            if (null != textList && textList.size() > 0) {
+                for (String text : textList) {
+                    if (!TextUtils.isEmpty(text) && text.contains("[微信红包]")) {
+                        final PendingIntent pendingIntent = notification.contentIntent;
+                        try {
+                            pendingIntent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                        }
+                        break;
+                    }
+                }
+            }
+        }  
+        
+    }
+    
+    //屏幕变化
+    private void OnWindowsChanged(AccessibilityEvent event)
+    {
+    	
+        String clazzName = event.getClassName().toString();													//获得类的名字
+        
+        //若类名和微信领取红包一级界面一致
+        if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
+        {
+            AccessibilityNodeInfo nodeInfo = event.getSource();
+            if (null != nodeInfo) {
+                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
+                if (null != list && list.size() > 0) {
+                    AccessibilityNodeInfo node = list.get(list.size() - 1);
+                    if (node.isClickable()) {
+                        node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    } else {
+                        AccessibilityNodeInfo parentNode = node;
+                        for (int i = 0; i < 5; i++) {
+                            if (null != parentNode) {
+                                parentNode = parentNode.getParent();
+                                if (null != parentNode && parentNode.isClickable() && !m_isClicked) {
+                                    parentNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                                    m_isClicked = true;
+                                    break;
                                 }
                             }
                         }
                     }
                 }
             }
-            
-            //若类名和微信领取红包二级界面一致
-            if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
-                AccessibilityNodeInfo nodeInfo = event.getSource();
-                if (null != nodeInfo) {
-                    List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("拆红包");
-                    for (AccessibilityNodeInfo node : list) {
-                        node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    }
+        }
+        
+        //若类名和微信领取红包二级界面一致
+        if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
+            AccessibilityNodeInfo nodeInfo = event.getSource();
+            if (null != nodeInfo) {
+                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("拆红包");
+                for (AccessibilityNodeInfo node : list) {
+                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
             }
         }
     }
-
+    
     //解锁屏幕
-    private void UnlockScreen() {
+    private void UnlockScreen() 
+    {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         final KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("MyKeyguardLock");
         keyguardLock.disableKeyguard();
@@ -121,7 +143,8 @@ public class MonitorService extends AccessibilityService
         wakeLock.acquire();
     }
 
-    public List<String> getText(Notification notification) {
+    //获取文本
+    private List<String> getText(Notification notification) {
         if (null == notification) return null;
 
         RemoteViews views = notification.bigContentView;
@@ -170,8 +193,5 @@ public class MonitorService extends AccessibilityService
         return text;
     }
 
-    @Override
-    public void onInterrupt() {
 
-    }
 }

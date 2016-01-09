@@ -28,6 +28,7 @@ import android.widget.TextView;
 import java.util.List;
 
 //主Activity
+//作用：显示主界面
 public class MainActivity extends Activity {
 	
     private static final Intent s_settingsIntent =new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
