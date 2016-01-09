@@ -3,6 +3,7 @@ package com.miscell.lucky;
 import android.app.Application;
 import com.flurry.android.FlurryAgent;
 
+//ºóÌ¨³ÌÐò
 public class LuckyApplication extends Application {
 
     @Override

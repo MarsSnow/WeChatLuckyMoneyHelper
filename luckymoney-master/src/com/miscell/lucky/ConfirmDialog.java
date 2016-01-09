@@ -12,10 +12,7 @@ import android.widget.TextView;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-/**
- * @author hdcb
- *
- */
+//确认对话框
 public class ConfirmDialog extends Dialog {
 	
     private LinearLayout m_buttonLayout;											//线性布局

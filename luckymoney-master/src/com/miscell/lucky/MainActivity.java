@@ -27,11 +27,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//
-/**
- * @author pengbo
- *	Ö÷Activity
- */
+//Ö÷Activity
 public class MainActivity extends Activity {
 	
     private static final Intent s_settingsIntent =new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);

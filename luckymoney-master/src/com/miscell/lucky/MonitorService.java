@@ -18,24 +18,33 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonitorService extends AccessibilityService {
+//监听器服务
+public class MonitorService extends AccessibilityService 
+{
 	
-    private boolean mLuckyClicked;
+    private boolean m_isClicked;
 
+    //监听无障碍服务
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-        final int eventType = event.getEventType();
+    public void onAccessibilityEvent(AccessibilityEvent event) 
+    {
+    	
+        final int eventType = event.getEventType();												//获取事件类型
 
-        if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-            unlockScreen();
-            mLuckyClicked = false;
+        //通知状态变化时
+        if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) 
+        {
+            UnlockScreen();																		//解锁屏幕
+            
+            m_isClicked = false;											
 
             /**
              * for API >= 18, we use NotificationListenerService to detect the notifications
              * below API_18 we use AccessibilityService to detect
              */
-
-            if (Build.VERSION.SDK_INT < 18) {
+            //低版本SDK
+            if (Build.VERSION.SDK_INT < 18) 
+            {
                 Notification notification = (Notification) event.getParcelableData();
                 List<String> textList = getText(notification);
                 if (null != textList && textList.size() > 0) {
@@ -50,12 +59,17 @@ public class MonitorService extends AccessibilityService {
                         }
                     }
                 }
-            }
+            }       
         }
 
-        if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            String clazzName = event.getClassName().toString();
-            if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) {
+        //屏幕状态变化时
+        if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) 
+        {
+            String clazzName = event.getClassName().toString();													//获得类的名字
+            
+            //若类名和微信领取红包一级界面一致
+            if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
+            {
                 AccessibilityNodeInfo nodeInfo = event.getSource();
                 if (null != nodeInfo) {
                     List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
@@ -68,9 +82,9 @@ public class MonitorService extends AccessibilityService {
                             for (int i = 0; i < 5; i++) {
                                 if (null != parentNode) {
                                     parentNode = parentNode.getParent();
-                                    if (null != parentNode && parentNode.isClickable() && !mLuckyClicked) {
+                                    if (null != parentNode && parentNode.isClickable() && !m_isClicked) {
                                         parentNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                                        mLuckyClicked = true;
+                                        m_isClicked = true;
                                         break;
                                     }
                                 }
@@ -79,7 +93,8 @@ public class MonitorService extends AccessibilityService {
                     }
                 }
             }
-
+            
+            //若类名和微信领取红包二级界面一致
             if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
                 AccessibilityNodeInfo nodeInfo = event.getSource();
                 if (null != nodeInfo) {
@@ -92,7 +107,8 @@ public class MonitorService extends AccessibilityService {
         }
     }
 
-    private void unlockScreen() {
+    //解锁屏幕
+    private void UnlockScreen() {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         final KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("MyKeyguardLock");
         keyguardLock.disableKeyguard();
