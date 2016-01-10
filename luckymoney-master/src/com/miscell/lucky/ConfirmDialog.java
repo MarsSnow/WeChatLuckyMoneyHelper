@@ -12,17 +12,16 @@ import android.widget.TextView;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-//È·ÈÏ¶Ô»°¿ò
+//ç¡®è®¤å¯¹è¯æ¡†
 public class ConfirmDialog extends Dialog 
 {
-	
     private LinearLayout m_buttonLayout;											
     private float m_density;														
 
     private View.OnClickListener m_positiveListener;								
     private String m_positiveTextStr;												
 
-    //³õÊ¼»¯
+    //åˆå§‹åŒ–
     public ConfirmDialog(Context context) 
     {
         super(context, R.style.FullHeightDialog);
@@ -34,7 +33,7 @@ public class ConfirmDialog extends Dialog
         m_density = getContext().getResources().getDisplayMetrics().density;		
     }
     
-    //ÏÔÊ¾¶Ô»°¿ò
+    //æ˜¾ç¤º
     @Override
     public void show() 
     {
@@ -47,7 +46,7 @@ public class ConfirmDialog extends Dialog
         super.show();
     }
     
-    //ÉèÖÃ±êÌâ
+    //è®¾ç½®æ ‡é¢˜
     public ConfirmDialog setTitle(String title) 
     {
         TextView textView = (TextView) findViewById(R.id.dialog_title);				
@@ -57,7 +56,7 @@ public class ConfirmDialog extends Dialog
         return this;
     }
 
-    //ÉèÖÃÏûÏ¢
+    //è®¾ç½®æ¶ˆæ¯
     public ConfirmDialog setMessage(String message) {
     	
         TextView textView = (TextView) findViewById(R.id.dialog_message);			
@@ -67,7 +66,7 @@ public class ConfirmDialog extends Dialog
         return this;
     }
 
-    //ÉèÖÃÈ·ÈÏ°´Å¥
+    //ç¡®å®šæŒ‰é’®
     public ConfirmDialog setPositiveButton(String text, View.OnClickListener listener) 
     {
         m_positiveListener = listener;
@@ -81,7 +80,7 @@ public class ConfirmDialog extends Dialog
         return this;
     }
 
-    //ÉèÖÃÈ¡Ïû°´Å¥
+    //å–æ¶ˆæŒ‰é’®
     public ConfirmDialog setNegativeButton(String text, View.OnClickListener listener) 
     {
         m_buttonLayout.removeAllViews();
@@ -115,7 +114,7 @@ public class ConfirmDialog extends Dialog
         return this;
     }
 
-    //»ñÈ¡Button¿Ø¼ş
+    //è·å¾—æŒ‰é’®
     private Button getButton(Context context, String text, View.OnClickListener listener) {
         int padding = (int) (8 * m_density + .5f);
 
