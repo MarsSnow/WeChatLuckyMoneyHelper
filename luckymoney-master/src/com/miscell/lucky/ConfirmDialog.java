@@ -12,58 +12,56 @@ import android.widget.TextView;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-//确认对话框
 public class ConfirmDialog extends Dialog {
 	
-    private LinearLayout m_buttonLayout;											//线性布局
-    private float m_density;														//屏幕密度
+    private LinearLayout m_buttonLayout;											
+    private float m_density;														
 
-    private View.OnClickListener m_positiveListener;								//监听器
-    private String m_positiveTextStr;												//位置文本str
+    private View.OnClickListener m_positiveListener;								
+    private String m_positiveTextStr;												
 
-    //构造函数
+
     public ConfirmDialog(Context context) {
         super(context, R.style.FullHeightDialog);
         
-        setCanceledOnTouchOutside(true);								            //点击屏幕外围时退出
-        setContentView(R.layout.confirm_dialog_layout);							    //设置布局文件
+        setCanceledOnTouchOutside(true);								           
+        setContentView(R.layout.confirm_dialog_layout);							   
 
-        m_buttonLayout = (LinearLayout) findViewById(R.id.button_layout);			//获得线性布局
-        m_density = getContext().getResources().getDisplayMetrics().density;		//获得屏幕密度
+        m_buttonLayout = (LinearLayout) findViewById(R.id.button_layout);			
+        m_density = getContext().getResources().getDisplayMetrics().density;		
     }
     
     @Override
     public void show() {
-        int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;  //获得屏幕宽度
+        int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;  
 
-        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();			//获得布局参数
-        layoutParams.width = (int) (screenWidth * 0.6f);								//设置布局宽度
-        getWindow().setAttributes(layoutParams);										//设置布局参数
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();			
+        layoutParams.width = (int) (screenWidth * 0.6f);								
+        getWindow().setAttributes(layoutParams);										
 
         super.show();
     }
     
-    //设置标题内容
     public ConfirmDialog setTitle(String title) {
     	
-        TextView textView = (TextView) findViewById(R.id.dialog_title);				//获得对话框标题控件
-        textView.setText(title);													//设置标题内容
-        textView.setVisibility(View.VISIBLE);										//设置为可见状态
+        TextView textView = (TextView) findViewById(R.id.dialog_title);				
+        textView.setText(title);													
+        textView.setVisibility(View.VISIBLE);										
 
         return this;
     }
 
-    //设置消息
+
     public ConfirmDialog setMessage(String message) {
     	
-        TextView textView = (TextView) findViewById(R.id.dialog_message);			//获得对话框内容控件
-        textView.setText(message);													//设置内容
-        textView.setVisibility(View.VISIBLE);										//设置为可见状态
+        TextView textView = (TextView) findViewById(R.id.dialog_message);			
+        textView.setText(message);													
+        textView.setVisibility(View.VISIBLE);										
 
         return this;
     }
 
-    //设置确定按钮
+   
     public ConfirmDialog setPositiveButton(String text, View.OnClickListener listener) {
         m_positiveListener = listener;
         m_positiveTextStr = text;
@@ -76,7 +74,7 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-    //设置取消按钮
+   
     public ConfirmDialog setNegativeButton(String text, View.OnClickListener listener) {
         m_buttonLayout.removeAllViews();
         m_buttonLayout.setWeightSum(2.f);
@@ -109,7 +107,7 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-    //获得按钮
+   
     private Button getButton(Context context, String text, View.OnClickListener listener) {
         int padding = (int) (8 * m_density + .5f);
 

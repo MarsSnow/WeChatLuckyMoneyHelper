@@ -27,15 +27,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//Ö÷Activity
-//×÷ÓÃ£ºÏÔÊ¾Ö÷½çÃæ
+
 public class MainActivity extends Activity {
 	
     private static final Intent s_settingsIntent =new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
-    private TextView m_accessibleLabel;																//¸¨Öú¹¦ÄÜ															
-    private TextView m_notificationLabel;															//Í¨Öª¹¦ÄÜ
-    private TextView m_labelText;																    //ËµÃ÷ÎÄ±¾
+    private TextView m_accessibleLabel;																														
+    private TextView m_notificationLabel;															
+    private TextView m_labelText;																    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,16 +51,16 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
         
         
-        ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				//¸¨Öú¹¦ÄÜ
-        ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				//Í¨Öª¹¦ÄÜ
+        ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				
+        ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				
         imageView1.setLayoutParams(lp);
         imageView2.setLayoutParams(lp);
         
-        m_accessibleLabel = (TextView) findViewById(R.id.label_accessible);						//¸¨Öú¹¦ÄÜ
-        m_notificationLabel = (TextView) findViewById(R.id.label_notification);					//Í¨Öª¹¦ÄÜ
-        m_labelText = (TextView) findViewById(R.id.label_text);									//ËµÃ÷ÎÄ±¾
+        m_accessibleLabel = (TextView) findViewById(R.id.label_accessible);						
+        m_notificationLabel = (TextView) findViewById(R.id.label_notification);					
+        m_labelText = (TextView) findViewById(R.id.label_text);									
 
-        ((TextView) findViewById(R.id.version_text)).setText("°æ±¾:" + getVersionName());
+        ((TextView) findViewById(R.id.version_text)).setText("ç‰ˆæœ¬å·:" + getVersionName());
         
         if (Build.VERSION.SDK_INT >= 18) {
         	
@@ -87,7 +86,6 @@ public class MainActivity extends Activity {
 //        }, 5000L);
     }
 
-    //»ñÈ¡³ÌĞò°æ±¾ºÅ
     private String getVersionName() {
         String versionName = "";
 
@@ -110,22 +108,22 @@ public class MainActivity extends Activity {
 
     private void changeLabelStatus() {
     	
-    	//¸¨Öú¹¦ÄÜ
+    	//è¾…åŠ©åŠŸèƒ½
         boolean isAccessibilityEnabled = isAccessibleEnabled();
         m_accessibleLabel.setTextColor(isAccessibilityEnabled ? 0xFF009588 : Color.RED);
-        m_accessibleLabel.setText(isAccessibleEnabled() ? "¸¨Öú¹¦ÄÜÒÑ´ò¿ª" : "¸¨Öú¹¦ÄÜÎ´´ò¿ª");
-        m_labelText.setText(isAccessibilityEnabled ? "ºÃÁË~Äã¿ÉÒÔÈ¥×öÆäËûÊÂÇéÁË£¬ÎÒ»á×Ô¶¯¸øÄãÇÀºì°üµÄ" : "Çë´ò¿ª¿ª¹Ø¿ªÊ¼ÇÀºì°ü");
+        m_accessibleLabel.setText(isAccessibleEnabled() ? "è¾…åŠ©åŠŸèƒ½å·²æ‰“å¼€" : "è¾…åŠ©åŠŸèƒ½æœªæ‰“å¼€");
+        m_labelText.setText(isAccessibilityEnabled ? "å¥½äº†~ä½ å¯ä»¥å»åšå…¶ä»–äº‹æƒ…äº†ï¼Œæˆ‘ä¼šè‡ªåŠ¨ç»™ä½ æŠ¢çº¢åŒ…çš„" : "è¯·æ‰“å¼€å¼€å…³å¼€å§‹æŠ¢çº¢åŒ…");
 
-        //Í¨Öª¹¦ÄÜ
+        //é€šçŸ¥åŠŸèƒ½
         if (Build.VERSION.SDK_INT >= 18) {
             boolean isNotificationEnabled = isNotificationEnabled();
             m_notificationLabel.setTextColor(isNotificationEnabled ? 0xFF009588 : Color.RED);
-            m_notificationLabel.setText(isNotificationEnabled ? "½ÓÊÕÍ¨ÖªÒÑ´ò¿ª" : "½ÓÊÕÍ¨ÖªÎ´´ò¿ª");
+            m_notificationLabel.setText(isNotificationEnabled ? "æ¥æ”¶é€šçŸ¥å·²æ‰“å¼€" : "æ¥æ”¶é€šçŸ¥æœªæ‰“å¼€");
 
             if (isAccessibilityEnabled && isNotificationEnabled) {
-                m_labelText.setText("ºÃÁË~Äã¿ÉÒÔÈ¥×öÆäËûÊÂÇéÁË£¬ÎÒ»á×Ô¶¯¸øÄãÇÀºì°üµÄ");
+                m_labelText.setText("å¥½äº†~ä½ å¯ä»¥å»åšå…¶ä»–äº‹æƒ…äº†ï¼Œæˆ‘ä¼šè‡ªåŠ¨ç»™ä½ æŠ¢çº¢åŒ…çš„");
             } else {
-                m_labelText.setText("Çë°ÑÁ½¸ö¿ª¹Ø¶¼´ò¿ª¿ªÊ¼ÇÀºì°ü");
+                m_labelText.setText("è¯·æŠŠä¸¤ä¸ªå¼€å…³éƒ½æ‰“å¼€å¼€å§‹æŠ¢çº¢åŒ…");
             }
         }
     }
@@ -163,15 +161,15 @@ public class MainActivity extends Activity {
 
     private void showEnableAccessibilityDialog() {
         final ConfirmDialog dialog = new ConfirmDialog(this);
-        dialog.setTitle("ÖØÒª!").setMessage("ÄúĞèÒª´ò¿ª\"ÓĞºì°ü\"µÄ¸¨Öú¹¦ÄÜÑ¡Ïî²ÅÄÜÇÀÎ¢ĞÅºì°ü")
-                .setPositiveButton("´ò¿ª", new View.OnClickListener() {
+        dialog.setTitle("é‡è¦!").setMessage("æ‚¨éœ€è¦æ‰“å¼€\"æœ‰çº¢åŒ…\"çš„è¾…åŠ©åŠŸèƒ½é€‰é¡¹æ‰èƒ½æŠ¢å¾®ä¿¡çº¢åŒ…")
+                .setPositiveButton("æ‰“å¼€", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(s_settingsIntent);
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("È¡Ïû", null);
+                .setNegativeButton("å–æ¶ˆ", null);
         dialog.show();
     }
 }

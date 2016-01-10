@@ -18,43 +18,38 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-//¼àÌıÆ÷·şÎñ
-//×÷ÓÃ£º¼àÌıÆÁÄ»ºì°üĞÅÏ¢£¬²¢½øĞĞ´¦Àí
+//ç›‘å¬å™¨æœåŠ¡
+//ä½œç”¨ï¼šç›‘å¬å±å¹•çº¢åŒ…ä¿¡æ¯ï¼Œå¹¶è¿›è¡Œå¤„ç†
 public class MonitorService extends AccessibilityService 
 {	
     private boolean m_isClicked;
  
-    //¼àÌıÎŞÕÏ°­·şÎñ
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) 
     {
-    	//»ñÈ¡ÊÂ¼şÀàĞÍ
         final int eventType = event.getEventType();												
 
-        //Í¨Öª×´Ì¬±ä»¯Ê±
         if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) 
         {
         	OnNotificationChanged(event);      
         }
 
-        //ÆÁÄ»×´Ì¬±ä»¯Ê±
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) 
         {
         	OnWindowsChanged(event);
         }
     }
-    
-    //±»´ò¶ÏÊ±µ÷ÓÃ
+
     @Override
     public void onInterrupt() 
     {
 
     }
     
-    //Í¨ÖªÀ¸±ä»¯
+    //é€šçŸ¥æ å˜åŒ–
     private void OnNotificationChanged(AccessibilityEvent event)
     {
-        UnlockScreen();																		//½âËøÆÁÄ»
+        UnlockScreen();																		//ç‘™ï½‰æ”£çå¿“ç®·
         
         m_isClicked = false;											
 
@@ -62,14 +57,14 @@ public class MonitorService extends AccessibilityService
          * for API >= 18, we use NotificationListenerService to detect the notifications
          * below API_18 we use AccessibilityService to detect
          */
-        //µÍ°æ±¾SDK
+        //æµ£åº£å¢—éˆç’DK
         if (Build.VERSION.SDK_INT < 18) 
         {
             Notification notification = (Notification) event.getParcelableData();
             List<String> textList = getText(notification);
             if (null != textList && textList.size() > 0) {
                 for (String text : textList) {
-                    if (!TextUtils.isEmpty(text) && text.contains("[Î¢ĞÅºì°ü]")) {
+                    if (!TextUtils.isEmpty(text) && text.contains("[å¾®ä¿¡çº¢åŒ…]")) {
                         final PendingIntent pendingIntent = notification.contentIntent;
                         try {
                             pendingIntent.send();
@@ -83,18 +78,16 @@ public class MonitorService extends AccessibilityService
         
     }
     
-    //ÆÁÄ»±ä»¯
     private void OnWindowsChanged(AccessibilityEvent event)
     {
     	
-        String clazzName = event.getClassName().toString();													//»ñµÃÀàµÄÃû×Ö
+        String clazzName = event.getClassName().toString();													//é‘¾å³°ç·±ç»«è¤æ®‘éšå¶…ç“§
         
-        //ÈôÀàÃûºÍÎ¢ĞÅÁìÈ¡ºì°üÒ»¼¶½çÃæÒ»ÖÂ
         if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
         {
             AccessibilityNodeInfo nodeInfo = event.getSource();
             if (null != nodeInfo) {
-                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("ÁìÈ¡ºì°ü");
+            	 List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("é¢†å–çº¢åŒ…");
                 if (null != list && list.size() > 0) {
                     AccessibilityNodeInfo node = list.get(list.size() - 1);
                     if (node.isClickable()) {
@@ -116,11 +109,11 @@ public class MonitorService extends AccessibilityService
             }
         }
         
-        //ÈôÀàÃûºÍÎ¢ĞÅÁìÈ¡ºì°ü¶ş¼¶½çÃæÒ»ÖÂ
+        //è‹¥ç±»åå’Œå¾®ä¿¡é¢†å–çº¢åŒ…äºŒçº§ç•Œé¢ä¸€è‡´
         if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
             AccessibilityNodeInfo nodeInfo = event.getSource();
             if (null != nodeInfo) {
-                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("²ğºì°ü");
+                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("æ‹†çº¢åŒ…");
                 for (AccessibilityNodeInfo node : list) {
                     node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
@@ -128,7 +121,6 @@ public class MonitorService extends AccessibilityService
         }
     }
     
-    //½âËøÆÁÄ»
     private void UnlockScreen() 
     {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
@@ -143,7 +135,6 @@ public class MonitorService extends AccessibilityService
         wakeLock.acquire();
     }
 
-    //»ñÈ¡ÎÄ±¾
     private List<String> getText(Notification notification) {
         if (null == notification) return null;
 
@@ -192,6 +183,5 @@ public class MonitorService extends AccessibilityService
 
         return text;
     }
-
 
 }

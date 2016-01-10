@@ -1,5 +1,6 @@
 package com.miscell.lucky;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.os.Bundle;
@@ -10,12 +11,9 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-//通知服务
-//作用：若有微信红包通知，则执行抢红包操作
 @SuppressWarnings("NewApi")
 public class NotificationService extends NotificationListenerService 
 {	
-	//当接收到通知时
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) 
     {
@@ -34,14 +32,12 @@ public class NotificationService extends NotificationListenerService
         }
     }
 
-    //当通知被移除时
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) 
     {
 
     }
     
-    //获取通知栏的数据
 	private List<String> GetNotificationInfos(Bundle bundle)
 	{
 		 List<String> strList = new ArrayList<String>();
@@ -60,19 +56,17 @@ public class NotificationService extends NotificationListenerService
          return strList;
 	}
 	
-	//执行通知栏的操作
 	private void PerformNotificationOperation(List<String> strList, Notification notification)
 	{
 		if (strList.size() > 0) 
         {
             for (String str : strList) 
             {
-                if (!TextUtils.isEmpty(str) && str.contains("[微信红包]")) 
+                if (!TextUtils.isEmpty(str) && str.contains("[寰俊绾㈠寘]")) 
                 {
                     final PendingIntent pendingIntent = notification.contentIntent;
                     try {
-                    	//执行通知栏的抢红包操作
-                        pendingIntent.send();
+                    	pendingIntent.send();
                     } catch (PendingIntent.CanceledException e) {
                     	
                     }
