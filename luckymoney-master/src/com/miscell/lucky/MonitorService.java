@@ -24,6 +24,7 @@ public class MonitorService extends AccessibilityService
 {	
     private boolean m_isClicked;
  
+    //接受到辅助功能的事件时
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) 
     {
@@ -40,16 +41,17 @@ public class MonitorService extends AccessibilityService
         }
     }
 
+    //程序被打断时
     @Override
     public void onInterrupt() 
     {
 
     }
     
-    //通知栏变化
+    //通知栏消息变化
     private void OnNotificationChanged(AccessibilityEvent event)
     {
-        UnlockScreen();																		//瑙ｉ攣灞忓箷
+        UnlockScreen();																	
         
         m_isClicked = false;											
 
@@ -57,7 +59,7 @@ public class MonitorService extends AccessibilityService
          * for API >= 18, we use NotificationListenerService to detect the notifications
          * below API_18 we use AccessibilityService to detect
          */
-        //浣庣増鏈琒DK
+
         if (Build.VERSION.SDK_INT < 18) 
         {
             Notification notification = (Notification) event.getParcelableData();
@@ -78,9 +80,9 @@ public class MonitorService extends AccessibilityService
         
     }
     
+    //窗口发生变化时
     private void OnWindowsChanged(AccessibilityEvent event)
     {
-    	
         String clazzName = event.getClassName().toString();													//鑾峰緱绫荤殑鍚嶅瓧
         
         if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
@@ -121,6 +123,7 @@ public class MonitorService extends AccessibilityService
         }
     }
     
+    //解锁屏幕
     private void UnlockScreen() 
     {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
@@ -135,6 +138,7 @@ public class MonitorService extends AccessibilityService
         wakeLock.acquire();
     }
 
+    //获得文本
     private List<String> getText(Notification notification) {
         if (null == notification) return null;
 

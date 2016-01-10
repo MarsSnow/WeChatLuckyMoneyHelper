@@ -27,8 +27,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-
-public class MainActivity extends Activity {
+//主Activity
+public class MainActivity extends Activity 
+{
 	
     private static final Intent s_settingsIntent =new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
@@ -36,8 +37,10 @@ public class MainActivity extends Activity {
     private TextView m_notificationLabel;															
     private TextView m_labelText;																    
 
+    //创建时
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.main);
@@ -49,8 +52,7 @@ public class MainActivity extends Activity {
         int width = (int) (screenWidth - (density * 12 + .5f) * 2);
         int height = (int) (366.f * width / 1080);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
-        
-        
+         
         ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				
         ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				
         imageView1.setLayoutParams(lp);
@@ -74,8 +76,6 @@ public class MainActivity extends Activity {
             findViewById(R.id.button_notification).setVisibility(View.GONE);
         }
 
-   
-
 //        imageView1.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -86,7 +86,9 @@ public class MainActivity extends Activity {
 //        }, 5000L);
     }
 
-    private String getVersionName() {
+    //获得版本名字
+    private String getVersionName() 
+    {
         String versionName = "";
 
         try {
@@ -99,15 +101,17 @@ public class MainActivity extends Activity {
         return versionName;
     }
 
-
+    //从其他界面返回时调用
     @Override
-    protected void onResume() {
+    protected void onResume() 
+    {
         super.onResume();
         changeLabelStatus();
     }
 
-    private void changeLabelStatus() {
-    	
+    //改变Label的状态
+    private void changeLabelStatus() 
+    {
     	//辅助功能
         boolean isAccessibilityEnabled = isAccessibleEnabled();
         m_accessibleLabel.setTextColor(isAccessibilityEnabled ? 0xFF009588 : Color.RED);
@@ -127,16 +131,20 @@ public class MainActivity extends Activity {
             }
         }
     }
-
+    
+    //点击设置通知栏按钮时
     public void onNotificationEnableButtonClicked(View view) {
         startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
     }
 
+    //设置按钮点击时
     public void onSettingsClicked(View view) {
         startActivity(s_settingsIntent);
     }
 
-    private boolean isAccessibleEnabled() {
+    //辅助功能是否已经打开
+    private boolean isAccessibleEnabled() 
+    {
         AccessibilityManager manager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
 
         List<AccessibilityServiceInfo> runningServices = manager.getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK);
@@ -148,6 +156,7 @@ public class MainActivity extends Activity {
         return false;
     }
 
+    //通知功能是否打开
     private boolean isNotificationEnabled() {
         ContentResolver contentResolver = getContentResolver();
         String enabledListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
@@ -159,7 +168,9 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void showEnableAccessibilityDialog() {
+    //显示是否打开辅助功能对话框
+    private void showEnableAccessibilityDialog() 
+    {
         final ConfirmDialog dialog = new ConfirmDialog(this);
         dialog.setTitle("重要!").setMessage("您需要打开\"有红包\"的辅助功能选项才能抢微信红包")
                 .setPositiveButton("打开", new View.OnClickListener() {

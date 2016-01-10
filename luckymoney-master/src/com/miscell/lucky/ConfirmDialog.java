@@ -12,7 +12,9 @@ import android.widget.TextView;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public class ConfirmDialog extends Dialog {
+//确认对话框
+public class ConfirmDialog extends Dialog 
+{
 	
     private LinearLayout m_buttonLayout;											
     private float m_density;														
@@ -20,8 +22,9 @@ public class ConfirmDialog extends Dialog {
     private View.OnClickListener m_positiveListener;								
     private String m_positiveTextStr;												
 
-
-    public ConfirmDialog(Context context) {
+    //初始化
+    public ConfirmDialog(Context context) 
+    {
         super(context, R.style.FullHeightDialog);
         
         setCanceledOnTouchOutside(true);								           
@@ -31,8 +34,10 @@ public class ConfirmDialog extends Dialog {
         m_density = getContext().getResources().getDisplayMetrics().density;		
     }
     
+    //显示对话框
     @Override
-    public void show() {
+    public void show() 
+    {
         int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;  
 
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();			
@@ -42,8 +47,9 @@ public class ConfirmDialog extends Dialog {
         super.show();
     }
     
-    public ConfirmDialog setTitle(String title) {
-    	
+    //设置标题
+    public ConfirmDialog setTitle(String title) 
+    {
         TextView textView = (TextView) findViewById(R.id.dialog_title);				
         textView.setText(title);													
         textView.setVisibility(View.VISIBLE);										
@@ -51,7 +57,7 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-
+    //设置消息
     public ConfirmDialog setMessage(String message) {
     	
         TextView textView = (TextView) findViewById(R.id.dialog_message);			
@@ -61,8 +67,9 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-   
-    public ConfirmDialog setPositiveButton(String text, View.OnClickListener listener) {
+    //设置确认按钮
+    public ConfirmDialog setPositiveButton(String text, View.OnClickListener listener) 
+    {
         m_positiveListener = listener;
         m_positiveTextStr = text;
         m_buttonLayout.removeAllViews();
@@ -74,8 +81,9 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-   
-    public ConfirmDialog setNegativeButton(String text, View.OnClickListener listener) {
+    //设置取消按钮
+    public ConfirmDialog setNegativeButton(String text, View.OnClickListener listener) 
+    {
         m_buttonLayout.removeAllViews();
         m_buttonLayout.setWeightSum(2.f);
 
@@ -107,7 +115,7 @@ public class ConfirmDialog extends Dialog {
         return this;
     }
 
-   
+    //获取Button控件
     private Button getButton(Context context, String text, View.OnClickListener listener) {
         int padding = (int) (8 * m_density + .5f);
 

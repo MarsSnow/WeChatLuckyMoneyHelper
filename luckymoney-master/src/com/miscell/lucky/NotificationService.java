@@ -11,9 +11,11 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+//通知服务
 @SuppressWarnings("NewApi")
 public class NotificationService extends NotificationListenerService 
 {	
+	//接受到通知栏消息时
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) 
     {
@@ -32,12 +34,14 @@ public class NotificationService extends NotificationListenerService
         }
     }
 
+    //通知栏消息被移除时
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) 
     {
 
     }
     
+    //获取通知栏消息
 	private List<String> GetNotificationInfos(Bundle bundle)
 	{
 		 List<String> strList = new ArrayList<String>();
@@ -56,6 +60,7 @@ public class NotificationService extends NotificationListenerService
          return strList;
 	}
 	
+	//执行通知栏消息
 	private void PerformNotificationOperation(List<String> strList, Notification notification)
 	{
 		if (strList.size() > 0) 
