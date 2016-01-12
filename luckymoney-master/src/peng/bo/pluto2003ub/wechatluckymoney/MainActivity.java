@@ -1,4 +1,4 @@
-package com.miscell.lucky;
+package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;

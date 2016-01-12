@@ -1,4 +1,4 @@
-package com.miscell.lucky;
+package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.app.Application;
 import com.flurry.android.FlurryAgent;

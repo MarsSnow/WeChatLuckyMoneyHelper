@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<accessibility-service
+
+<!-- 无障碍服务 -->
+<accessibility-service		
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:description="@string/app_name"
         android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged"
@@ -7,4 +9,14 @@
         android:packageNames="com.tencent.mm"
         android:notificationTimeout="100"
         android:accessibilityFlags="flagIncludeNotImportantViews"
-        android:canRetrieveWindowContent="true"/>
+        android:canRetrieveWindowContent="true"
+/>
+
+<!-- android命名空间 -->
+<!-- 服务名字 -->
+<!-- 无障碍服务接受的事件类型：新窗口状态发生改变、新窗口通知 -->
+<!-- 无障碍服务反馈类型 ：反馈所有-->
+<!-- 无障碍服务监听应用包名：腾讯微信 -->
+<!-- 无障碍服务监听频率：100ms = 0.1s -->
+<!-- 无障碍服务标示：包含非重要的视图 -->
+<!-- 是否可以获得窗口快照内容：是 -->

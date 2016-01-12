@@ -1,4 +1,4 @@
-package com.miscell.lucky;
+package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.KeyguardManager;
@@ -30,11 +30,13 @@ public class MonitorService extends AccessibilityService
     {
         final int eventType = event.getEventType();												
 
+        //新的显示事件
         if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) 
         {
         	OnNotificationChanged(event);      
         }
-
+        
+        //显示事件窗口变化
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) 
         {
         	OnWindowsChanged(event);
@@ -83,7 +85,7 @@ public class MonitorService extends AccessibilityService
     //窗口发生变化时
     private void OnWindowsChanged(AccessibilityEvent event)
     {
-        String clazzName = event.getClassName().toString();													//鑾峰緱绫荤殑鍚嶅瓧
+        String clazzName = event.getClassName().toString();													
         
         if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
         {

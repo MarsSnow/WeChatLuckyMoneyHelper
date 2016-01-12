@@ -1,4 +1,4 @@
-package com.miscell.lucky;
+package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.app.Dialog;
 import android.content.Context;

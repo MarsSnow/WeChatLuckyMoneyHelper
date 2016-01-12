@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.miscell.lucky"
+          package="peng.bo.pluto2003ub.wechatluckymoney"
           android:versionCode="5"
           android:versionName="1.6">
     <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="19"/>
 
+    <!-- 唤醒锁 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- 网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 需求连网 -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 需求额外存储 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 允许是屏幕锁失效 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <!-- 允许绑定无障碍服务 -->
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/>
 
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_lucky"
-                 android:name=".LuckyApplication"
-                 android:theme="@android:style/Theme.NoTitleBar">
+                 android:name="peng.bo.pluto2003ub.wechatluckymoney.LuckyApplication"
+                 android:theme="@android:style/Theme.NoTitleBar"
+                 >
+                 
+        <!-- 主Activity -->  
         <activity android:name="MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -23,18 +32,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name=".MonitorService"
+        
+        <!-- 无障碍服务 -->
+        <service android:name="peng.bo.pluto2003ub.wechatluckymoney.MonitorService"
                  android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
             <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessible_service_config"/>
         </service>
-        <service android:name=".NotificationService"
+        
+        <!-- 通知栏服务 -->
+        <service android:name="peng.bo.pluto2003ub.wechatluckymoney.NotificationService"
                  android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        
     </application>
 </manifest>

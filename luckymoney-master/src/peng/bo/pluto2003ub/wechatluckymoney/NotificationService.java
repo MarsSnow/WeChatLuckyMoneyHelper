@@ -1,4 +1,4 @@
-package com.miscell.lucky;
+package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //通知服务
+//若在其他界面，发现通知栏有微信红包消息，则直接执行相应的打开红包操作
 @SuppressWarnings("NewApi")
 public class NotificationService extends NotificationListenerService 
 {	
