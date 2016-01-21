@@ -24,6 +24,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -53,10 +54,10 @@ public class MainActivity extends Activity
         int height = (int) (366.f * width / 1080);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
          
-        ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				
-        ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				
-        imageView1.setLayoutParams(lp);
-        imageView2.setLayoutParams(lp);
+        //ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				
+        //ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				
+        //imageView1.setLayoutParams(lp);
+        //imageView2.setLayoutParams(lp);
         
         m_accessibleLabel = (TextView) findViewById(R.id.label_accessible);						
         m_notificationLabel = (TextView) findViewById(R.id.label_notification);					
@@ -66,12 +67,12 @@ public class MainActivity extends Activity
         
         if (Build.VERSION.SDK_INT >= 18) {
         	
-            imageView2.setVisibility(View.VISIBLE);
+            //imageView2.setVisibility(View.VISIBLE);
             m_notificationLabel.setVisibility(View.VISIBLE);
             findViewById(R.id.button_notification).setVisibility(View.VISIBLE);
         } else {
         	
-            imageView2.setVisibility(View.GONE);
+            //imageView2.setVisibility(View.GONE);
             m_notificationLabel.setVisibility(View.GONE);
             findViewById(R.id.button_notification).setVisibility(View.GONE);
         }
@@ -84,6 +85,8 @@ public class MainActivity extends Activity
 //
 //            }
 //        }, 5000L);
+        Toast.makeText(getApplicationContext(), "抢红包啦！",
+          	     Toast.LENGTH_SHORT).show();
     }
 
     //获得版本名字
@@ -115,17 +118,17 @@ public class MainActivity extends Activity
     	//辅助功能
         boolean isAccessibilityEnabled = isAccessibleEnabled();
         m_accessibleLabel.setTextColor(isAccessibilityEnabled ? 0xFF009588 : Color.RED);
-        m_accessibleLabel.setText(isAccessibleEnabled() ? "辅助功能已打开" : "辅助功能未打开");
+        m_accessibleLabel.setText(isAccessibleEnabled() ? "辅助功能已成功打开" : "辅助功能未打开");
         m_labelText.setText(isAccessibilityEnabled ? "好了~你可以去做其他事情了，我会自动给你抢红包的" : "请打开开关开始抢红包");
 
         //通知功能
         if (Build.VERSION.SDK_INT >= 18) {
             boolean isNotificationEnabled = isNotificationEnabled();
             m_notificationLabel.setTextColor(isNotificationEnabled ? 0xFF009588 : Color.RED);
-            m_notificationLabel.setText(isNotificationEnabled ? "接收通知已打开" : "接收通知未打开");
+            m_notificationLabel.setText(isNotificationEnabled ? "接收通知已成功打开" : "接收通知未打开");
 
             if (isAccessibilityEnabled && isNotificationEnabled) {
-                m_labelText.setText("好了~你可以去做其他事情了，我会自动给你抢红包的");
+                m_labelText.setText("作者：pluto2003ub");
             } else {
                 m_labelText.setText("请把两个开关都打开开始抢红包");
             }
@@ -135,11 +138,15 @@ public class MainActivity extends Activity
     //点击设置通知栏按钮时
     public void onNotificationEnableButtonClicked(View view) {
         startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+        Toast.makeText(getApplicationContext(), "点击通知栏",
+        	     Toast.LENGTH_SHORT).show();
     }
 
     //设置按钮点击时
     public void onSettingsClicked(View view) {
         startActivity(s_settingsIntent);
+        Toast.makeText(getApplicationContext(), "点击辅助服务",
+       	     Toast.LENGTH_SHORT).show();
     }
 
     //辅助功能是否已经打开
@@ -166,21 +173,5 @@ public class MainActivity extends Activity
         } else {
             return false;
         }
-    }
-
-    //显示是否打开辅助功能对话框
-    private void showEnableAccessibilityDialog() 
-    {
-        final ConfirmDialog dialog = new ConfirmDialog(this);
-        dialog.setTitle("重要!").setMessage("您需要打开\"有红包\"的辅助功能选项才能抢微信红包")
-                .setPositiveButton("打开", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(s_settingsIntent);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("取消", null);
-        dialog.show();
     }
 }

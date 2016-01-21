@@ -65,14 +65,23 @@ public class MonitorService extends AccessibilityService
         if (Build.VERSION.SDK_INT < 18) 
         {
             Notification notification = (Notification) event.getParcelableData();
+            
             List<String> textList = getText(notification);
-            if (null != textList && textList.size() > 0) {
-                for (String text : textList) {
-                    if (!TextUtils.isEmpty(text) && text.contains("[微信红包]")) {
+            
+            if (null != textList && textList.size() > 0) 
+            {
+                for (String text : textList) 
+                {
+                    if (!TextUtils.isEmpty(text) && text.contains("[微信红包]")) 
+                    {
                         final PendingIntent pendingIntent = notification.contentIntent;
-                        try {
+                        
+                        try 
+                        {
                             pendingIntent.send();
-                        } catch (PendingIntent.CanceledException e) {
+                            
+                        } catch (PendingIntent.CanceledException e) 
+                        {
                         }
                         break;
                     }
@@ -90,18 +99,30 @@ public class MonitorService extends AccessibilityService
         if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
         {
             AccessibilityNodeInfo nodeInfo = event.getSource();
-            if (null != nodeInfo) {
-            	 List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
-                if (null != list && list.size() > 0) {
-                    AccessibilityNodeInfo node = list.get(list.size() - 1);
-                    if (node.isClickable()) {
+            
+            if (null != nodeInfo) 
+            {
+            	List<AccessibilityNodeInfo> accessibilityNodeInfos = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
+            	 
+                if (null != accessibilityNodeInfos && accessibilityNodeInfos.size() > 0) 
+                {
+                    AccessibilityNodeInfo node = accessibilityNodeInfos.get(accessibilityNodeInfos.size() - 1);
+                    
+                    if (node.isClickable()) 
+                    {
                         node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    } else {
+                        
+                    } else 
+                    {
                         AccessibilityNodeInfo parentNode = node;
-                        for (int i = 0; i < 5; i++) {
-                            if (null != parentNode) {
+                        
+                        for (int i = 0; i < 5; i++) 
+                        {
+                            if (null != parentNode) 
+                            {
                                 parentNode = parentNode.getParent();
-                                if (null != parentNode && parentNode.isClickable() && !m_isClicked) {
+                                if (null != parentNode && parentNode.isClickable() && !m_isClicked) 
+                                {
                                     parentNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                                     m_isClicked = true;
                                     break;
@@ -114,11 +135,16 @@ public class MonitorService extends AccessibilityService
         }
         
         //若类名和微信领取红包二级界面一致
-        if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
+        if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) 
+        {
             AccessibilityNodeInfo nodeInfo = event.getSource();
-            if (null != nodeInfo) {
+            
+            if (null != nodeInfo) 
+            {
                 List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("拆红包");
-                for (AccessibilityNodeInfo node : list) {
+                
+                for (AccessibilityNodeInfo node : list) 
+                {
                     node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
             }
