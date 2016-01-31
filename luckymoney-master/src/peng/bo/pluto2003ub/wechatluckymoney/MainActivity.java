@@ -31,7 +31,6 @@ import java.util.List;
 //主Activity
 public class MainActivity extends Activity 
 {
-	
     private static final Intent s_settingsIntent =new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     private TextView m_accessibleLabel;																														
@@ -54,11 +53,6 @@ public class MainActivity extends Activity
         int height = (int) (366.f * width / 1080);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
          
-        //ImageView imageView1 = (ImageView) findViewById(R.id.image_accessibility);				
-        //ImageView imageView2 = (ImageView) findViewById(R.id.image_notification);				
-        //imageView1.setLayoutParams(lp);
-        //imageView2.setLayoutParams(lp);
-        
         m_accessibleLabel = (TextView) findViewById(R.id.label_accessible);						
         m_notificationLabel = (TextView) findViewById(R.id.label_notification);					
         m_labelText = (TextView) findViewById(R.id.label_text);									
@@ -66,42 +60,15 @@ public class MainActivity extends Activity
         ((TextView) findViewById(R.id.version_text)).setText("版本号:" + getVersionName());
         
         if (Build.VERSION.SDK_INT >= 18) {
-        	
-            //imageView2.setVisibility(View.VISIBLE);
             m_notificationLabel.setVisibility(View.VISIBLE);
             findViewById(R.id.button_notification).setVisibility(View.VISIBLE);
         } else {
-        	
-            //imageView2.setVisibility(View.GONE);
             m_notificationLabel.setVisibility(View.GONE);
             findViewById(R.id.button_notification).setVisibility(View.GONE);
         }
 
-//        imageView1.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i("test", "# fired");
-//                unlockScreen();
-//
-//            }
-//        }, 5000L);
         Toast.makeText(getApplicationContext(), "抢红包啦！",
           	     Toast.LENGTH_SHORT).show();
-    }
-
-    //获得版本名字
-    private String getVersionName() 
-    {
-        String versionName = "";
-
-        try {
-            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-            versionName = pi.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return versionName;
     }
 
     //从其他界面返回时调用
@@ -111,7 +78,20 @@ public class MainActivity extends Activity
         super.onResume();
         changeLabelStatus();
     }
+    
+    //点击设置通知栏按钮时(xml反射调用)
+    public void onNotificationEnableButtonClicked(View view) {
+        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+        Toast.makeText(getApplicationContext(), "点击通知栏",
+        	     Toast.LENGTH_SHORT).show();
+    }
 
+    //设置按钮点击时（xml反射调用）
+    public void onSettingsClicked(View view) {
+        startActivity(s_settingsIntent);
+        Toast.makeText(getApplicationContext(), "点击辅助服务",
+       	     Toast.LENGTH_SHORT).show();
+    }
     //改变Label的状态
     private void changeLabelStatus() 
     {
@@ -135,18 +115,19 @@ public class MainActivity extends Activity
         }
     }
     
-    //点击设置通知栏按钮时
-    public void onNotificationEnableButtonClicked(View view) {
-        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-        Toast.makeText(getApplicationContext(), "点击通知栏",
-        	     Toast.LENGTH_SHORT).show();
-    }
+    //获得版本名字
+    private String getVersionName() 
+    {
+        String versionName = "";
 
-    //设置按钮点击时
-    public void onSettingsClicked(View view) {
-        startActivity(s_settingsIntent);
-        Toast.makeText(getApplicationContext(), "点击辅助服务",
-       	     Toast.LENGTH_SHORT).show();
+        try {
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return versionName;
     }
 
     //辅助功能是否已经打开
