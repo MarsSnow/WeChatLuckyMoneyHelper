@@ -2,6 +2,8 @@ package peng.bo.pluto2003ub.wechatluckymoney;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.KeyguardManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -26,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //主Activity
@@ -42,6 +45,8 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        ActivityManager mActivityManager =     
+                (ActivityManager)getSystemService(ACTIVITY_SERVICE);  
         
         setContentView(R.layout.main);
 
@@ -82,16 +87,53 @@ public class MainActivity extends Activity
     //点击设置通知栏按钮时(xml反射调用)
     public void onNotificationEnableButtonClicked(View view) {
         startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-        Toast.makeText(getApplicationContext(), "点击通知栏",
+        Toast.makeText(getApplicationContext(), "请设置本应用可使用通知栏选项",
         	     Toast.LENGTH_SHORT).show();
     }
 
     //设置按钮点击时（xml反射调用）
     public void onSettingsClicked(View view) {
         startActivity(s_settingsIntent);
-        Toast.makeText(getApplicationContext(), "点击辅助服务",
+        Toast.makeText(getApplicationContext(), "请设置本应用可使用辅助功能选项",
        	     Toast.LENGTH_SHORT).show();
     }
+    
+    public boolean isWorked(String serverName)  
+    {        
+     ActivityManager myManager=(ActivityManager)getSystemService(serverName);  
+     ArrayList<RunningServiceInfo> runningService = (ArrayList<RunningServiceInfo>) myManager.getRunningServices(30);  
+     for(int i = 0 ; i<runningService.size();i++)  
+     {  
+      if(runningService.get(i).service.getClassName().toString().equals(serverName))  
+      {  
+       return true;  
+      }  
+     }  
+     return false;  
+    }  
+    
+    
+    public void onIsOpenServerClicked(View view)
+    {
+    	String serverName = "android.accessibilityservice.AccessibilityService";
+    	boolean isServerOpen = false;
+    	isServerOpen = isWorked(serverName);
+    	if(isServerOpen)
+    	{
+    		Toast.makeText(getApplicationContext(), "停止自动抢红包", Toast.LENGTH_SHORT);
+    		final Intent intent = new Intent();  
+            // 为Intent设置Action属性  
+            intent.setAction(serverName);  
+            stopService(intent);   
+    	}else{
+    		Toast.makeText(getApplicationContext(), "开启自动抢红包", Toast.LENGTH_SHORT);
+    		final Intent intent = new Intent();  
+            // 为Intent设置Action属性  
+            intent.setAction(serverName);  
+            startService(intent);  
+    	}
+    }
+    
     //改变Label的状态
     private void changeLabelStatus() 
     {

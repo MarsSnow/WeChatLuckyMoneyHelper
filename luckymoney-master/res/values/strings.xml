@@ -3,4 +3,6 @@
     <string name="app_name">微信抢红包助手</string>
     <string name="enable_notification">开启通知开关</string>
     <string name="enable_accessibility">开启辅助功能</string>
+    <string name = "enable_stopServer">暂停自动抢红包</string>
+    <string name = "enable_openServer">开启自动抢红包</string>
 </resources>
