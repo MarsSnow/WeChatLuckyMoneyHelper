@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -57,12 +58,38 @@ public class MonitorService extends AccessibilityService
         
         m_isClicked = false;											
 
+        Toast.makeText(getApplicationContext(), "抢红包啦",
+        	     Toast.LENGTH_SHORT).show();
+        
         /**
          * for API >= 18, we use NotificationListenerService to detect the notifications
          * below API_18 we use AccessibilityService to detect
          */
-
-        if (Build.VERSION.SDK_INT < 18) 
+        Notification notification = (Notification) event.getParcelableData();
+        
+        List<String> textList = getText(notification);
+        
+        if (null != textList && textList.size() > 0) 
+        {
+            for (String text : textList) 
+            {
+                if (!TextUtils.isEmpty(text) && text.contains("[微信红包]")) 
+                {
+                    final PendingIntent pendingIntent = notification.contentIntent;
+                    
+                    try 
+                    {
+                        pendingIntent.send();
+                        
+                    } catch (PendingIntent.CanceledException e) 
+                    {
+                    }
+                    break;
+                }
+            }
+        }
+        
+        /*if (Build.VERSION.SDK_INT < 18) 
         {
             Notification notification = (Notification) event.getParcelableData();
             
@@ -87,7 +114,7 @@ public class MonitorService extends AccessibilityService
                     }
                 }
             }
-        }  
+        }*/  
         
     }
     
@@ -96,14 +123,14 @@ public class MonitorService extends AccessibilityService
     {
         String clazzName = event.getClassName().toString();													
         
-        if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
+        /*if (clazzName.equals("com.tencent.mm.ui.LauncherUI")) 
         {
             AccessibilityNodeInfo nodeInfo = event.getSource();
             
             if (null != nodeInfo) 
             {
-            	List<AccessibilityNodeInfo> accessibilityNodeInfos = nodeInfo.findAccessibilityNodeInfosByText("领取红包");
-            	 
+            	List<AccessibilityNodeInfo> accessibilityNodeInfos = nodeInfo.findAccessibilityNodeInfosByText("微信红包");
+               
                 if (null != accessibilityNodeInfos && accessibilityNodeInfos.size() > 0) 
                 {
                     AccessibilityNodeInfo node = accessibilityNodeInfos.get(accessibilityNodeInfos.size() - 1);
@@ -132,8 +159,43 @@ public class MonitorService extends AccessibilityService
                     }
                 }
             }
-        }
+        }*/
+        if(true){
+        AccessibilityNodeInfo nodeInfo = event.getSource();
         
+        if (null != nodeInfo) 
+        {
+        	List<AccessibilityNodeInfo> accessibilityNodeInfos = nodeInfo.findAccessibilityNodeInfosByText("微信红包");
+           
+            if (null != accessibilityNodeInfos && accessibilityNodeInfos.size() > 0) 
+            {
+                AccessibilityNodeInfo node = accessibilityNodeInfos.get(accessibilityNodeInfos.size() - 1);
+                
+                if (node.isClickable()) 
+                {
+                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    
+                } else 
+                {
+                    AccessibilityNodeInfo parentNode = node;
+                    
+                    for (int i = 0; i < 5; i++) 
+                    {
+                        if (null != parentNode) 
+                        {
+                            parentNode = parentNode.getParent();
+                            if (null != parentNode && parentNode.isClickable() && !m_isClicked) 
+                            {
+                                parentNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                                m_isClicked = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        }
         //若类名和微信领取红包二级界面一致
         if (clazzName.equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) 
         {
@@ -141,8 +203,8 @@ public class MonitorService extends AccessibilityService
             
             if (null != nodeInfo) 
             {
-                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("拆红包");
-                
+                //List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText("拆红包");
+            	List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b43");
                 for (AccessibilityNodeInfo node : list) 
                 {
                     node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
